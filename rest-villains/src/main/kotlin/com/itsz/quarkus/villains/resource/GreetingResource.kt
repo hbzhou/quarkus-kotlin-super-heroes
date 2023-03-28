@@ -1,4 +1,4 @@
-package com.itsz.quarkus
+package com.itsz.quarkus.villains.resource
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path
