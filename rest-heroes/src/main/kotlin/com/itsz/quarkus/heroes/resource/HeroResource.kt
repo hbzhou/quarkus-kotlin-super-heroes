@@ -18,8 +18,14 @@ class HeroResource(val heroService: HeroService) {
     @GET
     @Path("/{id}")
     fun getById(@RestPath id: Long): Uni<Response> = heroService.getById(id)
-            .onItem()
-            .transform { it.let { if (it != null) Response.ok(it).build() else Response.status(404).build() } }
+        .onItem()
+        .transform {
+            if (it != null) {
+                Response.ok(it).build()
+            } else {
+                Response.status(404).build()
+            }
+        }
 
     @POST
     fun createHero(hero: Hero): Uni<Response> = heroService.create(hero).onItem().transform { Response.ok(it).build() }
@@ -29,7 +35,8 @@ class HeroResource(val heroService: HeroService) {
 
     @DELETE
     @Path("/{id}")
-    fun delete(@RestPath id: Long): Uni<Response> = heroService.delete(id).onItem().transform { Response.noContent().build() }
+    fun delete(@RestPath id: Long): Uni<Response> =
+        heroService.delete(id).onItem().transform { Response.noContent().build() }
 
 
 }
