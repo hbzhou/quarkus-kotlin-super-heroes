@@ -10,6 +10,7 @@
   <modules>
     <module>rest-heroes</module>
     <module>rest-villains</module>
+    <module>rest-fight</module>
   </modules>
   <properties>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
