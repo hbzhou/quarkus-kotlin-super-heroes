@@ -1,9 +1,9 @@
 apiVersion: v1
 data:
-  POSTGRESQL_HOST: "villains-database"
-  POSTGRESQL_USER: "badman"
-  POSTGRESQL_PASSWORD: "badman"
-  POSTGRESQL_DATABASE: "villains_database"
+  postgresql-host: "villains-database"
+  postgresql-user: "badman"
+  postgresql-password: "badman"
+  postgresql-database: "villains_database"
 kind: ConfigMap
 metadata:
   name: villains-config
@@ -32,9 +32,22 @@ spec:
             - containerPort: 5432
               protocol: TCP
               name: http
-          envFrom:
-            - configMapRef:
-                name: villains-config
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-user
+                  name: villains-config
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-password
+                  name: villains-config
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-database
+                  name: villains-config
 ---
 apiVersion: v1
 kind: Service

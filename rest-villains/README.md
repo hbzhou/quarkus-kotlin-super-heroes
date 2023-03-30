@@ -64,3 +64,13 @@ Easily start your Reactive RESTful Web Services
 ```shell
 kubectl create configmap villains-config --from-literal=db.username="badman" --from-literal=db.password="badman" --from-literal=db.database="villains_database" --dry-run -o yaml
 ```
+
+###  create nginx ingress controller 
+```shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+### forwarding port to ingress
+```shell
+kubectl port-forward -n ingress-nginx ${ingress-controller pod name} 80:80
+```
