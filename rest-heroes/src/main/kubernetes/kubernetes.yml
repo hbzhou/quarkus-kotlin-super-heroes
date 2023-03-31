@@ -1,0 +1,84 @@
+apiVersion: v1
+data:
+  postgresql-host: "heroes-database"
+  postgresql-user: "superman"
+  postgresql-password: "superman"
+  postgresql-database: "heroes_database"
+kind: ConfigMap
+metadata:
+  name: heroes-config
+  namespace: superheroes
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rest-heroes
+  namespace: superheroes
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: superheroes.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: rest-heroes
+                port:
+                  number: 80
+            path: /api/heroes
+            pathType: Prefix
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heroes-database
+  namespace: superheroes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: heroes-database
+  template:
+    metadata:
+      labels:
+        name: heroes-database
+    spec:
+      containers:
+        - name: heroes-database
+          image: centos/postgresql-96-centos7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+              name: http
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-user
+                  name: heroes-config
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-password
+                  name: heroes-config
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: postgresql-database
+                  name: heroes-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: superheroes
+  name: heroes-database
+spec:
+  ports:
+    - name: http
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    name: heroes-database
+  type: ClusterIP
