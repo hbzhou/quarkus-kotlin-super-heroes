@@ -11,6 +11,7 @@ import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.core.Response
 import com.itsz.quarkus.fight.dto.Fighters
+import io.smallrye.common.annotation.Blocking
 
 
 @Path("/api/fights")
@@ -19,6 +20,11 @@ class FightResource(val fightService: FightService, val logger: Logger) {
 
     @GET
     fun findAll(): Uni<Response> = fightService.findAll().onItem().transform { Response.ok(it).build() }
+
+    @GET
+    @Path("/random")
+    @Blocking
+    fun findRandomFighters(): Uni<Fighters> = fightService.findRandomFighters()
 
     @GET
     @Path("/{id}")

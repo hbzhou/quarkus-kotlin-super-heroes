@@ -3,8 +3,11 @@ package com.itsz.quarkus.fight.service
 import com.itsz.quarkus.fight.dto.Fighters
 import com.itsz.quarkus.fight.model.Fight
 import com.itsz.quarkus.fight.respository.FightRepository
+import com.itsz.quarkus.fight.restClient.HeroRestClient
+import com.itsz.quarkus.fight.restClient.VillainRestClient
 import io.smallrye.mutiny.Uni
 import org.bson.types.ObjectId
+import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.jboss.logging.Logger
 import java.time.Instant
 import java.util.Random
@@ -14,7 +17,14 @@ import javax.transaction.Transactional
 
 @ApplicationScoped
 @Transactional(Transactional.TxType.SUPPORTS)
-class FightService(val fightRepository: FightRepository, val logger: Logger) {
+class FightService(
+    val fightRepository: FightRepository,
+    val logger: Logger,
+    @RestClient
+    val heroRestClient: HeroRestClient,
+    @RestClient
+    val villainRestClient: VillainRestClient
+) {
 
     fun findAll() = fightRepository.findAll().list()
 
@@ -34,6 +44,12 @@ class FightService(val fightRepository: FightRepository, val logger: Logger) {
 
         return fightRepository.persist(fight)
 
+    }
+
+    fun findRandomFighters(): Uni<Fighters> {
+        val hero = heroRestClient.findRandomHero()
+        val villain = villainRestClient.findRandomVillain()
+        return Uni.createFrom().item { Fighters(hero, villain) }
     }
 
     private fun heroWon(fighters: Fighters): Fight {

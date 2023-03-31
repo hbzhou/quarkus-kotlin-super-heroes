@@ -23,8 +23,12 @@ class VillainResource(val villainService: VillainService) {
     @Path("/{id}")
     fun getById(@RestPath id: Long): Response {
         val villain = villainService.findById(id)
-        return if (villain != null) Response.ok(villain).build() else Response.noContent().build()
+        return Response.ok(villain).build()
     }
+
+    @GET
+    @Path("/random")
+    fun getRandomVillain(): Response = Response.ok(villainService.findRandomVillain()).build()
 
     @POST
     fun create(@Valid villainDto: VillainDto): Response = Response.ok(villainService.persist(villainDto)).build()

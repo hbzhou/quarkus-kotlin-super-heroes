@@ -5,6 +5,7 @@ import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactiona
 import io.smallrye.mutiny.Uni
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.BadRequestException
+import kotlin.random.Random
 
 @ApplicationScoped
 class HeroService {
@@ -16,6 +17,10 @@ class HeroService {
     @ReactiveTransactional
     fun create(hero: Hero) = hero.persist<Hero>()
 
+    fun getRandomHero(): Uni<Hero?> {
+        val random = (1..3).random()
+        return Hero.findById(random.toLong())
+    }
 
    @ReactiveTransactional
     fun update(hero: Hero): Uni<Hero?> = Hero.findById(id = hero.id!!)

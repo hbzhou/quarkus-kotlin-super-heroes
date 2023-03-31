@@ -32,7 +32,10 @@ class VillainService(val villainsRepository: VillainsRepository) {
 
 
     @Transactional(Transactional.TxType.SUPPORTS)
-    fun findById(id: Long) = villainsRepository.findById(id)
+    fun findById(id: Long): Villain = villainsRepository.findById(id)
+
+    @Transactional(Transactional.TxType.SUPPORTS)
+    fun findRandomVillain():Villain = villainsRepository.findById((1..3).random().toLong())
 
     fun persist(villainDto: VillainDto) {
         val villain = Villain(

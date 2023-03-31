@@ -25,6 +25,11 @@ class HeroResource(val heroService: HeroService) {
                 Response.status(404).build()
             }
         }
+
+    @GET
+    @Path("/random")
+    fun getRandomHero(): Uni<Response> = heroService.getRandomHero().onItem().transform { Response.ok(it).build() }
+
     @POST
     fun createHero(hero: Hero): Uni<Response> = heroService.create(hero).onItem().transform { Response.ok(it).build() }
     @PUT
