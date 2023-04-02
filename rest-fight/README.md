@@ -63,3 +63,11 @@ If you want to learn more about building native executables, please consult http
 Easily start your Reactive RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+### Create user for db
+```shell
+docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=123456  -e MONGO_INITDB_DATABASE=rest-fight  mongo
+```
+```shell
+db.createUser({user: 'root', pwd: 'root', roles: [{role: 'readWrite', db: 'rest-fight'}]})
+```
