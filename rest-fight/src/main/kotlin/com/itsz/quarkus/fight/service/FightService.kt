@@ -7,6 +7,8 @@ import com.itsz.quarkus.fight.restClient.HeroRestClient
 import com.itsz.quarkus.fight.restClient.VillainRestClient
 import io.smallrye.mutiny.Uni
 import org.bson.types.ObjectId
+import org.eclipse.microprofile.reactive.messaging.Channel
+import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.jboss.logging.Logger
 import java.time.Instant
@@ -23,7 +25,9 @@ class FightService(
     @RestClient
     val heroRestClient: HeroRestClient,
     @RestClient
-    val villainRestClient: VillainRestClient
+    val villainRestClient: VillainRestClient,
+    @Channel("fights")
+    val emitter: Emitter<Fight>
 ) {
 
     fun findAll() = fightRepository.findAll().list()
@@ -41,7 +45,7 @@ class FightService(
         } else {
             if (Random().nextBoolean()) heroWon(fighters) else villainWon(fighters)
         }
-
+        emitter.send(fight).toCompletableFuture().join()
         return fightRepository.persist(fight)
 
     }
