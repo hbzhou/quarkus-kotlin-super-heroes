@@ -5,13 +5,13 @@ import java.time.Instant
 
 @MongoEntity(collection = "fights")
 data class Fight(
-    var fightDate: Instant,
-    var winnerName: String,
-    var winnerLevel: Int,
-    var winnerPicture: String,
-    var loserName: String,
-    var loserLevel: Int,
-    var loserPicture: String,
-    var winnerTeam: String,
-    var loserTeam: String
+    var fightDate: Instant?= Instant.now(),
+    var winnerName: String? =null,
+    var winnerLevel: Int? = 0,
+    var winnerPicture: String? = null,
+    var loserName: String? = null,
+    var loserLevel: Int? = 0 ,
+    var loserPicture: String? = null,
+    var winnerTeam: String? = null,
+    var loserTeam: String? = null
 )
