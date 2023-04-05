@@ -12,9 +12,9 @@ import org.eclipse.microprofile.reactive.messaging.Emitter
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.jboss.logging.Logger
 import java.time.Instant
-import java.util.Random
 import javax.enterprise.context.ApplicationScoped
 import javax.transaction.Transactional
+import kotlin.random.Random
 
 
 @ApplicationScoped
@@ -30,20 +30,21 @@ class FightService(
     val emitter: Emitter<Fight>
 ) {
 
+
     fun findAll() = fightRepository.findAll().list()
 
     fun findById(id: String) = fightRepository.findById(ObjectId(id))
 
     fun persistFight(fighters: Fighters): Uni<Fight> {
-        val heroAdjust: Int = Random().nextInt(20)
-        val villainAdjust: Int = Random().nextInt(20)
+        val heroAdjust: Int = Random.nextInt(20)
+        val villainAdjust: Int = Random.nextInt(20)
 
         val fight = if (fighters.hero.level + heroAdjust > fighters.villain.level + villainAdjust) {
             heroWon(fighters)
         } else if (fighters.hero.level < fighters.villain.level) {
             villainWon(fighters)
         } else {
-            if (Random().nextBoolean()) heroWon(fighters) else villainWon(fighters)
+            if (Random.nextBoolean()) heroWon(fighters) else villainWon(fighters)
         }
         emitter.send(fight).toCompletableFuture().join()
         return fightRepository.persist(fight)
