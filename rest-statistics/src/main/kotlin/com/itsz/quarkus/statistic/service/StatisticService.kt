@@ -3,13 +3,14 @@ package com.itsz.quarkus.statistic.service
 import com.itsz.quarkus.statistic.dto.Fight
 import com.itsz.quarkus.statistic.dto.Ranking
 import com.itsz.quarkus.statistic.dto.TeamStats
+import io.quarkus.runtime.annotations.RegisterForReflection
 import io.smallrye.mutiny.Multi
 import org.eclipse.microprofile.reactive.messaging.Incoming
 import org.eclipse.microprofile.reactive.messaging.Outgoing
 import org.jboss.logging.Logger
 import javax.enterprise.context.ApplicationScoped
 
-
+@RegisterForReflection
 data class Score(
     var name: String? = null,
     var score: Int = 0,

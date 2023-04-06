@@ -1,7 +1,10 @@
 package com.itsz.quarkus.statistic.dto
 
+import io.quarkus.runtime.annotations.RegisterForReflection
 import java.time.Instant
 
+
+@RegisterForReflection
 data class Fight(
     var fightDate: Instant,
     var winnerName: String,

@@ -22,3 +22,19 @@ mvn io.quarkus:quarkus-maven-plugin:2.15.3.Final:create \
     -Dpath="api/villains" \
     -Dextensions="kotlin,resteasy-reactive-jackson"
 ```
+
+##### 3.setup graalvm in WSL 2.0 sub system centos
+```shell
+## downloading graalvm package from github
+wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.1/graalvm-ce-java17-linux-amd64-22.3.1.tar.gz
+## config jdk env making sure your're using graalvm jdk
+java -version
+## install native-image
+gu install native-image
+## install package dependencies for build native image
+yum install make gcc zlib-devel -y
+```
+##### 4.build your native image 
+```shell
+mvn clean package -Pnative
+```
